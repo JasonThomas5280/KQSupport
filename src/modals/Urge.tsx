@@ -28,7 +28,10 @@ export function UrgeScreen({
   const [breathPhase, setBreathPhase] = useState<"in" | "hold" | "out">("in");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reason = state.profile.reason;
-  const shareable = state.circle.filter((c) => c.sharedVisibility);
+  // Who the "Text them" button reaches: a go-to person with a number first,
+  // otherwise anyone with a number. No number → no button (it couldn't work).
+  const reachable = state.circle.filter((c) => c.phone);
+  const goTo = reachable.find((c) => c.isGoTo) ?? reachable[0];
 
   useEffect(() => {
     if (phase !== "breathe") return;
@@ -103,9 +106,9 @@ export function UrgeScreen({
           <button style={primaryBtn} onClick={() => setPhase("breathe")}>
             Ride the wave with me
           </button>
-          {shareable.length > 0 && (
-            <button style={ghostBtn} onClick={() => onTextCircle(shareable[0])}>
-              Text {shareable[0].name} right now
+          {goTo && (
+            <button style={ghostBtn} onClick={() => onTextCircle(goTo)}>
+              Text {goTo.name} right now
             </button>
           )}
           <div style={{ fontSize: 12, color: "rgba(234,242,244,0.45)", textAlign: "center", lineHeight: 1.6 }}>

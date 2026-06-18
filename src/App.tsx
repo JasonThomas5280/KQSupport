@@ -18,11 +18,12 @@ import { ACCENT, BG, TEXT } from "./styles/tokens";
 type Screen = "home" | "progress" | "journey" | "connect";
 type Modal = "urge" | "checkin" | "document" | "taper" | "invite" | "settings" | null;
 
-// Open the SMS composer with a prefilled body (build spec §8.1).
+// Open the SMS composer pre-addressed to the member, body prefilled (spec §8.1).
+// "?&body=" is the form that works across iOS and Android.
 function textCircle(member: CircleMember) {
   const body = encodeURIComponent("I'm having a hard moment, can you talk?");
-  window.location.href = `sms:&body=${body}`;
-  void member;
+  const to = member.phone.replace(/[^\d+]/g, "");
+  window.location.href = `sms:${to}?&body=${body}`;
 }
 
 export default function App() {
@@ -79,7 +80,6 @@ export default function App() {
       )}
       {modal === "invite" && (
         <CircleInviteScreen
-          defaultQuietDays={state.settings.quietAlertDefaultDays}
           onClose={() => setModal(null)}
           onSave={(member) => dispatch({ type: "ADD_CIRCLE", member })}
         />

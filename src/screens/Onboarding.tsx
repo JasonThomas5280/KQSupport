@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
+import { OnboardingArt } from "../components/OnboardingArt";
 import { PRODUCTS } from "../model/constants";
 import { todayISO } from "../model/dates";
 import type { Method, Product, Profile } from "../model/types";
@@ -41,6 +42,7 @@ export function Onboarding({ onComplete }: { onComplete: (profile: Profile) => v
 
   const steps = [
     <div key="0" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 20 }}>
+      <OnboardingArt variant="path" />
       <div style={{ fontSize: 28, fontWeight: 300, lineHeight: 1.3 }}>
         Getting off kratom isn't a streak.
         <br />
@@ -56,6 +58,7 @@ export function Onboarding({ onComplete }: { onComplete: (profile: Profile) => v
       </button>
     </div>,
     <div key="1" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 22 }}>
+      <OnboardingArt variant="wave" />
       <div style={{ fontSize: 22, fontWeight: 300 }}>What are you stepping away from?</div>
       <Field label="What were you using?">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -91,6 +94,7 @@ export function Onboarding({ onComplete }: { onComplete: (profile: Profile) => v
       </div>
     </div>,
     <div key="2" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 22 }}>
+      <OnboardingArt variant="sunrise" />
       <div style={{ fontSize: 22, fontWeight: 300 }}>Your reason.</div>
       <Field
         label="Why are you quitting?"
@@ -116,6 +120,7 @@ export function Onboarding({ onComplete }: { onComplete: (profile: Profile) => v
       </div>
     </div>,
     <div key="3" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 22 }}>
+      <OnboardingArt variant="savings" />
       <div style={{ fontSize: 22, fontWeight: 300 }}>The money.</div>
       <Field
         label="How much were you spending?"

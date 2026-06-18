@@ -1,5 +1,5 @@
 import type { AppState } from "../model/types";
-import { PANEL, eyebrow, primaryBtn } from "../styles/tokens";
+import { ACCENT, PANEL, eyebrow, primaryBtn } from "../styles/tokens";
 
 export function Circle({ state, onInvite }: { state: AppState; onInvite: () => void }) {
   return (
@@ -31,9 +31,14 @@ export function Circle({ state, onInvite }: { state: AppState; onInvite: () => v
               {c.name[0].toUpperCase()}
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{c.name}</div>
+              <div style={{ fontSize: 15, fontWeight: 500 }}>
+                {c.name}
+                {c.isGoTo && (
+                  <span style={{ fontSize: 11, color: ACCENT, fontWeight: 600, marginLeft: 8 }}>· go-to</span>
+                )}
+              </div>
               <div style={{ fontSize: 12, color: "rgba(234,242,244,0.45)", marginTop: 2 }}>
-                {c.role} · {c.sharedVisibility ? "Sees check-ins" : "Private"} · {c.quietAlertDays}d nudge
+                {c.role} · {c.phone ? c.phone : "no number — add one to text them"}
               </div>
             </div>
           </div>
@@ -45,8 +50,12 @@ export function Circle({ state, onInvite }: { state: AppState; onInvite: () => v
       <div style={{ background: "rgba(91,143,199,0.08)", border: "1px solid rgba(91,143,199,0.2)", borderRadius: 14, padding: 16 }}>
         <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>How Circle works</div>
         <div style={{ fontSize: 13, color: "rgba(234,242,244,0.6)", lineHeight: 1.6 }}>
-          You choose who sees what — opt-in per person, revocable anytime. The "text right now" button in a
-          craving reaches a shared person. Go quiet past your threshold and they get a gentle nudge.
+          The people here stay one tap away. In a craving, the “Text them” button opens a message to your
+          go-to person, already written — you just hit send. Nothing is shared automatically and no one is
+          contacted without you doing it.{" "}
+          <span style={{ color: "rgba(234,242,244,0.45)" }}>
+            Shared check-ins and a gentle nudge when you go quiet are coming soon.
+          </span>
         </div>
       </div>
       <div style={{ background: PANEL, borderRadius: 14, padding: 16 }}>
