@@ -65,7 +65,10 @@ export interface CircleMember {
   id: string;
   name: string;
   role: string;
-  sharedVisibility: boolean;
+  /** Phone number for the one-tap SMS reach-out in the urge tool. "" if none. */
+  phone: string;
+  /** The person the urge tool's "Text {name}" button reaches first. */
+  isGoTo: boolean;
   quietAlertDays: number;
 }
 

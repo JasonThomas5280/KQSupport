@@ -14,16 +14,14 @@ import {
 export function CircleInviteScreen({
   onClose,
   onSave,
-  defaultQuietDays,
 }: {
   onClose: () => void;
   onSave: (member: CircleMember) => void;
-  defaultQuietDays: number;
 }) {
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [role, setRole] = useState("Support person");
-  const [shared, setShared] = useState(true);
-  const [quietDays, setQuietDays] = useState(defaultQuietDays);
+  const [isGoTo, setIsGoTo] = useState(true);
   const roles = ["Support person", "Sponsor / counselor", "Family", "Quit buddy"];
   return (
     <div style={{ ...overlayStyle, overflow: "auto" }}>
@@ -37,6 +35,18 @@ export function CircleInviteScreen({
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <Field label="Name">
           <input style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} placeholder="Their name" />
+        </Field>
+        <Field
+          label="Phone number"
+          hint="So the “Text them” button in a craving opens a message to them, pre-written. Optional, but that button needs it."
+        >
+          <input
+            type="tel"
+            style={inputStyle}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="(555) 123-4567"
+          />
         </Field>
         <Field label="Who are they?">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -60,14 +70,14 @@ export function CircleInviteScreen({
           </div>
         </Field>
         <Field
-          label="Share your check-ins with them?"
-          hint="They see only what you share. Revocable anytime. The person you'd text mid-craving should be shared."
+          label="Your go-to person for hard moments?"
+          hint="The one the craving tool reaches first. You can have more than one — this just sets who's first."
         >
           <div style={{ display: "flex", gap: 8 }}>
             {[true, false].map((v) => (
               <button
                 key={String(v)}
-                onClick={() => setShared(v)}
+                onClick={() => setIsGoTo(v)}
                 style={{
                   flex: 1,
                   padding: "12px 0",
@@ -75,25 +85,30 @@ export function CircleInviteScreen({
                   cursor: "pointer",
                   fontSize: 14,
                   color: TEXT,
-                  background: shared === v ? "rgba(95,176,165,0.15)" : "rgba(255,255,255,0.04)",
-                  border: shared === v ? `1px solid ${ACCENT}` : "1px solid rgba(255,255,255,0.08)",
+                  background: isGoTo === v ? "rgba(95,176,165,0.15)" : "rgba(255,255,255,0.04)",
+                  border: isGoTo === v ? `1px solid ${ACCENT}` : "1px solid rgba(255,255,255,0.08)",
                 }}
               >
-                {v ? "Yes, share" : "Keep private"}
+                {v ? "Yes" : "Not now"}
               </button>
             ))}
           </div>
         </Field>
-        <Field label={`Nudge them if I go quiet for ${quietDays} days`} hint="Isolation is where relapse hides.">
-          <input
-            type="range"
-            min="1"
-            max="7"
-            value={quietDays}
-            onChange={(e) => setQuietDays(Number(e.target.value))}
-            style={{ width: "100%", accentColor: ACCENT }}
-          />
-        </Field>
+        <div
+          style={{
+            background: "rgba(255,255,255,0.03)",
+            border: "1px dashed rgba(255,255,255,0.12)",
+            borderRadius: 12,
+            padding: 14,
+            fontSize: 12,
+            color: "rgba(234,242,244,0.5)",
+            lineHeight: 1.6,
+          }}
+        >
+          <strong style={{ color: "rgba(234,242,244,0.7)" }}>Coming soon:</strong> letting them see the
+          check-ins you choose to share, and a gentle nudge if you go quiet. Those need a secure account
+          for both of you, so they're not on yet — for now, Circle keeps your people one tap away.
+        </div>
       </div>
       <button
         style={{ ...primaryBtn, marginTop: 24 }}
@@ -102,9 +117,10 @@ export function CircleInviteScreen({
           onSave({
             id: Date.now().toString(),
             name: name.trim(),
+            phone: phone.trim(),
             role,
-            sharedVisibility: shared,
-            quietAlertDays: quietDays,
+            isGoTo,
+            quietAlertDays: 3,
           });
           onClose();
         }}
