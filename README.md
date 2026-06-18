@@ -49,8 +49,38 @@ Circle sync later, layer it behind these same three signatures; nothing else cha
   tool and Circle; a persistent medical disclaimer lives in Settings.
 - Requires legal review before launch.
 
+## Native apps (App Store / Google Play)
+
+The same web build is wrapped for the stores with [Capacitor](https://capacitorjs.com).
+The native iOS (`ios/`) and Android (`android/`) projects live in the repo; the web
+assets they load are produced by `build:native` (which sets a relative asset base so
+they resolve inside a WebView) and copied in by `cap sync`.
+
+```bash
+npm run sync:native     # build:native + cap sync  (run after any web change)
+
+# Android — needs Android Studio / JDK
+npx cap open android    # then Build > Generate Signed Bundle (.aab) → Play Console
+
+# iOS — needs macOS + Xcode + CocoaPods
+cd ios/App && pod install && cd ../..
+npx cap open ios        # then Product > Archive → App Store Connect
+```
+
+App identity lives in `capacitor.config.ts` (`appId` `com.clearrecovery.app`,
+`appName` `CLEAR`). The synced `public/` asset folders are gitignored — regenerate
+them with `cap sync`.
+
+**Before submitting:** Apple Developer Program ($99/yr) + Google Play ($25 once);
+app icons/splash (defaults are placeholders — replace before launch); a privacy
+policy (data is local-only, nothing collected); and — non-negotiable for a
+drug-recovery app touching crisis moments — the **legal review** the spec flags as
+blocking. Expect extra App Store scrutiny for health/recovery content; frame as
+peer support and tracking, not medical care.
+
 ## Status
 
-Web v1 (P0 + P1) per `docs/clear-kratom-recovery-build-spec.md`. Native build,
-encrypted backend / Circle sync, and counselor export are future (P2) work.
-The full ticket breakdown lives with the approved plan.
+Web v1 (P0 + P1) per `docs/clear-kratom-recovery-build-spec.md`, now wrapped as
+native iOS/Android shells (Capacitor). Local/push notifications, encrypted backend
+/ Circle sync, and counselor export remain future (P2) work. The full ticket
+breakdown lives with the approved plan.
