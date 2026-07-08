@@ -3,7 +3,7 @@ import { moneyMilestones } from "../model/phase";
 import type { AppState, Metrics, TrendPoint } from "../model/types";
 import { ACCENT, PANEL, eyebrow, ghostBtn } from "../styles/tokens";
 
-export function Saved({
+export function Money({
   state,
   m,
   trend,
@@ -19,7 +19,7 @@ export function Saved({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div>
-        <div style={eyebrow}>What you're getting back</div>
+        <div style={eyebrow}>Money</div>
         <div style={{ fontSize: 22, fontWeight: 300, lineHeight: 1.3 }}>
           The cost of quitting is zero. The cost of using was not.
         </div>
