@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 import { Field } from "../components/Field";
+import { IconDownload } from "../components/icons";
 import { Overlay } from "../components/Overlay";
+import { serializeState } from "../model/backup";
+import { todayISO } from "../model/dates";
 import type { AppState } from "../model/types";
 import { eyebrow, ghostBtn, inputStyle, primaryBtn } from "../styles/tokens";
 
@@ -20,6 +24,18 @@ export function SettingsScreen({
   const [spend, setSpend] = useState<string>(
     state.profile.dailySpend != null ? String(state.profile.dailySpend) : "",
   );
+  const [confirmingReset, setConfirmingReset] = useState(false);
+
+  const downloadBackup = () => {
+    const blob = new Blob([serializeState(state)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `clear-backup-${todayISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Overlay onClose={onClose} style={{ overflow: "auto" }}>
       <div style={{ marginBottom: 22 }}>
@@ -56,14 +72,39 @@ export function SettingsScreen({
           Save
         </button>
         <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "8px 0" }} />
+        <div>
+          <div style={{ ...eyebrow, letterSpacing: 0.5 }}>Your data</div>
+          <button
+            style={{ ...ghostBtn, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+            onClick={downloadBackup}
+          >
+            <IconDownload size={17} />
+            Download a backup (JSON)
+          </button>
+          <div style={{ fontSize: 12, color: "rgba(234,242,244,0.4)", lineHeight: 1.5, marginTop: 8 }}>
+            Everything stays on this device. A backup file is the only copy that exists anywhere else.
+          </div>
+        </div>
         <button
           style={{ ...ghostBtn, color: "#d4685e", borderColor: "rgba(212,104,94,0.3)" }}
-          onClick={() => {
-            if (confirm("Erase everything and start over?")) onHardReset();
-          }}
+          onClick={() => setConfirmingReset(true)}
         >
           Reset all data
         </button>
+        {confirmingReset && (
+          <ConfirmDialog
+            title="Erase everything?"
+            body="This permanently clears all data on this device — check-ins, taper log, and Circle. Consider downloading a backup first."
+            confirmLabel="Erase all data"
+            danger
+            extraAction={{ label: "Download backup first", onClick: downloadBackup }}
+            onConfirm={() => {
+              setConfirmingReset(false);
+              onHardReset();
+            }}
+            onCancel={() => setConfirmingReset(false)}
+          />
+        )}
         <div
           style={{
             fontSize: 11,
