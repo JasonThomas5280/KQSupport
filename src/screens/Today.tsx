@@ -53,41 +53,38 @@ export function Today({
           )}
         </div>
       )}
+      <button
+        style={
+          checkedInToday
+            ? {
+                ...primaryBtn,
+                background: "linear-gradient(135deg, rgba(95,176,165,0.16), rgba(95,176,165,0.08))",
+                border: `1px solid rgba(95,176,165,0.3)`,
+                color: ACCENT,
+              }
+            : primaryBtn
+        }
+        onClick={onCheckIn}
+      >
+        {checkedInToday ? "Check in again" : "Check in"}
+      </button>
       <div style={{ background: "rgba(91,143,199,0.1)", border: "1px solid rgba(91,143,199,0.25)", borderRadius: 16, padding: "16px 18px" }}>
         <div style={{ fontSize: 12, color: ACCENT, fontWeight: 600, letterSpacing: 0.5, marginBottom: 6, textTransform: "uppercase" }}>
           {phase.tag}
         </div>
         <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(234,242,244,0.8)" }}>{phase.msg}</div>
       </div>
-      {m.moneySaved != null && (
-        <div style={{ display: "flex", justifyContent: "center", gap: 28 }}>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 22, fontWeight: 700, color: ACCENT }}>${m.moneySaved.toLocaleString()}</div>
-            <div style={{ fontSize: 11, color: "rgba(234,242,244,0.45)", marginTop: 2 }}>saved</div>
-          </div>
-          <div style={{ width: 1, background: "rgba(255,255,255,0.08)" }} />
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>{m.urgesRidden}</div>
-            <div style={{ fontSize: 11, color: "rgba(234,242,244,0.45)", marginTop: 2 }}>urges ridden</div>
-          </div>
-          <div style={{ width: 1, background: "rgba(255,255,255,0.08)" }} />
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>{m.setbackCount}</div>
-            <div style={{ fontSize: 11, color: "rgba(234,242,244,0.45)", marginTop: 2 }}>slips</div>
-          </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 28 }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>{m.urgesRidden}</div>
+          <div style={{ fontSize: 11, color: "rgba(234,242,244,0.45)", marginTop: 2 }}>urges ridden</div>
         </div>
-      )}
-      <button
-        style={{
-          ...primaryBtn,
-          background: "linear-gradient(135deg, rgba(95,176,165,0.16), rgba(95,176,165,0.08))",
-          border: `1px solid rgba(95,176,165,0.3)`,
-          color: ACCENT,
-        }}
-        onClick={onCheckIn}
-      >
-        {checkedInToday ? "Check in again" : "Check in"}
-      </button>
+        <div style={{ width: 1, background: "rgba(255,255,255,0.08)" }} />
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>{m.setbackCount}</div>
+          <div style={{ fontSize: 11, color: "rgba(234,242,244,0.45)", marginTop: 2 }}>slips</div>
+        </div>
+      </div>
       {state.profile.method === "taper" && (
         <button style={ghostBtn} onClick={onTaper}>
           {state.taper.active
@@ -95,6 +92,7 @@ export function Today({
             : "Set up taper log"}
         </button>
       )}
+      <div style={{ height: 1, background: "rgba(255,255,255,0.08)" }} />
       <div>
         <div style={{ ...eyebrow, letterSpacing: 0.5 }}>Recent check-ins</div>
         {checkins.length === 0 ? (
@@ -122,10 +120,16 @@ export function Today({
         )}
       </div>
       <button
-        style={{ ...ghostBtn, background: "transparent", borderColor: "rgba(255,255,255,0.06)", color: "rgba(234,242,244,0.35)", fontSize: 13 }}
+        style={{
+          ...ghostBtn,
+          background: "transparent",
+          border: "none",
+          color: "rgba(234,242,244,0.4)",
+          fontSize: 13,
+        }}
         onClick={onDocument}
       >
-        Document a slip
+        Had a slip? Log it — it's data, not a reset.
       </button>
     </div>
   );
