@@ -138,8 +138,8 @@ export default function App() {
             onDocument={() => setModal("document")}
           />
         )}
-        {screen === "progress" && <Money state={state} m={m} trend={trend} onOpenSettings={() => setModal("settings")} />}
-        {screen === "journey" && <Path m={m} journey={journey} />}
+        {screen === "progress" && <Money state={state} m={m} onOpenSettings={() => setModal("settings")} />}
+        {screen === "journey" && <Path m={m} journey={journey} trend={trend} />}
         {screen === "connect" && <Circle state={state} onInvite={() => setModal("invite")} />}
       </div>
 

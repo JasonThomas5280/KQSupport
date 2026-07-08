@@ -1,17 +1,14 @@
-import { SymptomTrendChart } from "../components/SymptomTrendChart";
 import { moneyMilestones } from "../model/phase";
-import type { AppState, Metrics, TrendPoint } from "../model/types";
+import type { AppState, Metrics } from "../model/types";
 import { ACCENT, PANEL, eyebrow, ghostBtn } from "../styles/tokens";
 
 export function Money({
   state,
   m,
-  trend,
   onOpenSettings,
 }: {
   state: AppState;
   m: Metrics;
-  trend: TrendPoint[];
   onOpenSettings: () => void;
 }) {
   const mMiles = moneyMilestones(m.moneySaved);
@@ -57,17 +54,6 @@ export function Money({
           Add your daily spend to see money saved →
         </button>
       )}
-      <div>
-        <div style={{ ...eyebrow, letterSpacing: 0.5 }}>Symptoms over time</div>
-        {trend.length < 2 ? (
-          <div style={{ fontSize: 14, color: "rgba(234,242,244,0.4)", padding: "14px 0", lineHeight: 1.5 }}>
-            Rate your symptoms in a few check-ins. Once there are two days of data, you'll see the line — and
-            watch it fall as withdrawal recedes.
-          </div>
-        ) : (
-          <SymptomTrendChart points={trend} />
-        )}
-      </div>
     </div>
   );
 }

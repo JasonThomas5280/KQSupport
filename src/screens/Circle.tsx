@@ -8,6 +8,14 @@ export function Circle({ state, onInvite }: { state: AppState; onInvite: () => v
         <div style={eyebrow}>Your Circle</div>
         <div style={{ fontSize: 22, fontWeight: 300, lineHeight: 1.3 }}>Quitting alone is the hardest way.</div>
       </div>
+      <div style={{ background: PANEL, borderRadius: 14, padding: 16 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>Free support lines</div>
+        <div style={{ fontSize: 13, color: "rgba(234,242,244,0.6)", lineHeight: 1.7 }}>
+          SAMHSA National Helpline · <strong>1-800-662-4357</strong> · free, confidential, 24/7
+          <br />
+          Crisis Text Line · text <strong>HOME to 741741</strong>
+        </div>
+      </div>
       {state.circle.length === 0 ? (
         <div style={{ fontSize: 14, color: "rgba(234,242,244,0.45)", textAlign: "center", padding: "18px 0", lineHeight: 1.5 }}>
           No one here yet. Add a quit buddy, family member, or counselor — ideally someone you'd text
@@ -56,14 +64,6 @@ export function Circle({ state, onInvite }: { state: AppState; onInvite: () => v
           <span style={{ color: "rgba(234,242,244,0.45)" }}>
             Shared check-ins and a gentle nudge when you go quiet are coming soon.
           </span>
-        </div>
-      </div>
-      <div style={{ background: PANEL, borderRadius: 14, padding: 16 }}>
-        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>Free support lines</div>
-        <div style={{ fontSize: 13, color: "rgba(234,242,244,0.6)", lineHeight: 1.7 }}>
-          SAMHSA National Helpline · <strong>1-800-662-4357</strong> · free, confidential, 24/7
-          <br />
-          Crisis Text Line · text <strong>HOME to 741741</strong>
         </div>
       </div>
     </div>
