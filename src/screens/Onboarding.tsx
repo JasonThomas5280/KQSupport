@@ -185,7 +185,7 @@ export function Onboarding({ onComplete }: { onComplete: (profile: Profile) => v
   ];
 
   return (
-    <div style={{ ...overlayStyle, justifyContent: "flex-start" }}>
+    <div className="clear-overlay" style={{ ...overlayStyle, justifyContent: "flex-start", overflow: "auto" }}>
       <StepIndicator step={step} total={4} />
       {steps[step]}
     </div>

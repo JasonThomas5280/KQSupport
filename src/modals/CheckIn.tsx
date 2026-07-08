@@ -1,18 +1,11 @@
 import { useState } from "react";
+import { Overlay } from "../components/Overlay";
 import { SeverityTrack } from "../components/SeverityTrack";
 import { StepIndicator } from "../components/StepIndicator";
 import { SYMPTOMS, MOOD_MAP } from "../model/constants";
 import { todayISO } from "../model/dates";
 import type { CheckinEntry } from "../model/types";
-import {
-  TEXT,
-  closeBtnStyle,
-  eyebrow,
-  ghostBtn,
-  inputStyle,
-  overlayStyle,
-  primaryBtn,
-} from "../styles/tokens";
+import { TEXT, eyebrow, ghostBtn, inputStyle, primaryBtn } from "../styles/tokens";
 
 export function CheckInScreen({
   onClose,
@@ -27,10 +20,7 @@ export function CheckInScreen({
   const [note, setNote] = useState("");
   const moods = Object.entries(MOOD_MAP).map(([k, v]) => ({ key: k, ...v }));
   return (
-    <div style={{ ...overlayStyle, overflow: "auto" }}>
-      <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
-        ×
-      </button>
+    <Overlay onClose={onClose} style={{ overflow: "auto" }}>
       <StepIndicator step={step - 1} total={2} label={step === 1 ? "How you feel" : "Symptoms & note"} />
       {step === 1 && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 28 }}>
@@ -132,6 +122,6 @@ export function CheckInScreen({
           </div>
         </div>
       )}
-    </div>
+    </Overlay>
   );
 }

@@ -10,6 +10,7 @@ import {
 import { appReducer, type Action } from "./reducer";
 import { loadState, saveState, resetStore } from "./storage";
 import { DEFAULT_STATE } from "../model/constants";
+import { Splash } from "../components/Splash";
 import type { AppState } from "../model/types";
 
 interface StoreValue {
@@ -51,22 +52,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   };
 
   if (!ready) {
-    return (
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "#0c141d",
-          color: "rgba(234,242,244,0.5)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontFamily: "'Inter', -apple-system, sans-serif",
-        }}
-      >
-        Loading…
-      </div>
-    );
+    return <Splash />;
   }
 
   return (

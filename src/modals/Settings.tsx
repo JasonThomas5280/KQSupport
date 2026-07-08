@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
+import { Overlay } from "../components/Overlay";
 import type { AppState } from "../model/types";
-import {
-  closeBtnStyle,
-  eyebrow,
-  ghostBtn,
-  inputStyle,
-  overlayStyle,
-  primaryBtn,
-} from "../styles/tokens";
+import { eyebrow, ghostBtn, inputStyle, primaryBtn } from "../styles/tokens";
 
 export function SettingsScreen({
   state,
@@ -27,10 +21,7 @@ export function SettingsScreen({
     state.profile.dailySpend != null ? String(state.profile.dailySpend) : "",
   );
   return (
-    <div style={{ ...overlayStyle, overflow: "auto" }}>
-      <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
-        ×
-      </button>
+    <Overlay onClose={onClose} style={{ overflow: "auto" }}>
       <div style={{ marginBottom: 22 }}>
         <div style={eyebrow}>Settings</div>
       </div>
@@ -87,6 +78,6 @@ export function SettingsScreen({
           self-harm, seek medical help.
         </div>
       </div>
-    </div>
+    </Overlay>
   );
 }

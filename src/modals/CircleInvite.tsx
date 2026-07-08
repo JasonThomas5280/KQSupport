@@ -1,15 +1,8 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
+import { Overlay } from "../components/Overlay";
 import type { CircleMember } from "../model/types";
-import {
-  ACCENT,
-  TEXT,
-  closeBtnStyle,
-  eyebrow,
-  inputStyle,
-  overlayStyle,
-  primaryBtn,
-} from "../styles/tokens";
+import { ACCENT, TEXT, eyebrow, inputStyle, primaryBtn } from "../styles/tokens";
 
 export function CircleInviteScreen({
   onClose,
@@ -24,10 +17,7 @@ export function CircleInviteScreen({
   const [isGoTo, setIsGoTo] = useState(true);
   const roles = ["Support person", "Sponsor / counselor", "Family", "Quit buddy"];
   return (
-    <div style={{ ...overlayStyle, overflow: "auto" }}>
-      <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
-        ×
-      </button>
+    <Overlay onClose={onClose} style={{ overflow: "auto" }}>
       <div style={{ marginBottom: 22 }}>
         <div style={eyebrow}>Add to your Circle</div>
         <div style={{ fontSize: 24, fontWeight: 300 }}>Who's in this with you?</div>
@@ -127,6 +117,6 @@ export function CircleInviteScreen({
       >
         Add
       </button>
-    </div>
+    </Overlay>
   );
 }

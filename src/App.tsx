@@ -58,7 +58,15 @@ export default function App() {
   ];
 
   return (
+    <>
+      <div className="clear-desktop-brand">
+        <div style={{ fontSize: 20, fontWeight: 300, letterSpacing: 5, color: "rgba(234,242,244,0.8)" }}>CLEAR</div>
+        <div style={{ fontSize: 12, color: "rgba(234,242,244,0.4)", marginTop: 4 }}>
+          Track the whole path, not just the streak.
+        </div>
+      </div>
     <div
+      className="clear-phone"
       style={{
         background: BG,
         color: TEXT,
@@ -106,7 +114,7 @@ export default function App() {
         />
       )}
 
-      <div style={{ padding: "48px 24px 120px", minHeight: "100vh", boxSizing: "border-box" }}>
+      <div className="clear-content" style={{ padding: "48px 24px 120px", minHeight: "100vh", boxSizing: "border-box" }}>
         <button
           onClick={() => setModal("settings")}
           style={{
@@ -144,6 +152,7 @@ export default function App() {
       </div>
 
       <div
+        className="clear-tabbar"
         style={{
           position: "fixed",
           bottom: 0,
@@ -194,5 +203,6 @@ export default function App() {
         ))}
       </div>
     </div>
+    </>
   );
 }
