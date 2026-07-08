@@ -29,6 +29,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   // Load once on mount; fall back to DEFAULT_STATE.
   useEffect(() => {
+    // Ask the browser to shield this origin's storage from eviction —
+    // Safari in particular deletes un-persisted IndexedDB after inactivity,
+    // and this data is someone's entire recorded journey.
+    void navigator.storage?.persist?.().catch(() => {});
     (async () => {
       const loaded = await loadState();
       if (loaded) dispatch({ type: "HYDRATE", state: loaded });
