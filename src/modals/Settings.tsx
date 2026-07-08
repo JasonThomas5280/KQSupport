@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { Field } from "../components/Field";
 import { IconDownload } from "../components/icons";
 import { Overlay } from "../components/Overlay";
-import { serializeState } from "../model/backup";
+import { parseBackup, serializeState } from "../model/backup";
 import { todayISO } from "../model/dates";
 import type { AppState } from "../model/types";
 import { eyebrow, ghostBtn, inputStyle, primaryBtn } from "../styles/tokens";
@@ -13,11 +13,13 @@ export function SettingsScreen({
   onClose,
   onPatch,
   onHardReset,
+  onRestore,
 }: {
   state: AppState;
   onClose: () => void;
   onPatch: (patch: Partial<AppState>) => void;
   onHardReset: () => void;
+  onRestore: (state: AppState) => void;
 }) {
   const [name, setName] = useState(state.profile.name);
   const [reason, setReason] = useState(state.profile.reason);
@@ -25,6 +27,17 @@ export function SettingsScreen({
     state.profile.dailySpend != null ? String(state.profile.dailySpend) : "",
   );
   const [confirmingReset, setConfirmingReset] = useState(false);
+  const [pendingRestore, setPendingRestore] = useState<AppState | null>(null);
+  const [restoreError, setRestoreError] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onBackupChosen = async (file: File | undefined) => {
+    if (!file) return;
+    const parsed = parseBackup(await file.text());
+    setRestoreError(!parsed);
+    setPendingRestore(parsed);
+    if (fileRef.current) fileRef.current.value = "";
+  };
 
   const downloadBackup = () => {
     const blob = new Blob([serializeState(state)], { type: "application/json" });
@@ -81,6 +94,24 @@ export function SettingsScreen({
             <IconDownload size={17} />
             Download a backup (JSON)
           </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="application/json,.json"
+            style={{ display: "none" }}
+            onChange={(e) => void onBackupChosen(e.target.files?.[0])}
+          />
+          <button
+            style={{ ...ghostBtn, marginTop: 8, background: "transparent", fontSize: 14 }}
+            onClick={() => fileRef.current?.click()}
+          >
+            Restore from a backup file
+          </button>
+          {restoreError && (
+            <div style={{ fontSize: 12, color: "#d4685e", lineHeight: 1.5, marginTop: 8 }}>
+              That file isn't a CLEAR backup.
+            </div>
+          )}
           <div style={{ fontSize: 12, color: "rgba(234,242,244,0.4)", lineHeight: 1.5, marginTop: 8 }}>
             Everything stays on this device. A backup file is the only copy that exists anywhere else.
           </div>
@@ -91,6 +122,19 @@ export function SettingsScreen({
         >
           Reset all data
         </button>
+        {pendingRestore && (
+          <ConfirmDialog
+            title="Restore this backup?"
+            body="This replaces everything currently on this device with the backup's contents."
+            confirmLabel="Restore backup"
+            onConfirm={() => {
+              onRestore(pendingRestore);
+              setPendingRestore(null);
+              onClose();
+            }}
+            onCancel={() => setPendingRestore(null)}
+          />
+        )}
         {confirmingReset && (
           <ConfirmDialog
             title="Erase everything?"

@@ -111,6 +111,10 @@ export default function App() {
             setModal(null);
             setScreen("home");
           }}
+          onRestore={(restored) => {
+            dispatch({ type: "HYDRATE", state: restored });
+            setScreen("home");
+          }}
         />
       )}
 
