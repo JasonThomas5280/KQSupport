@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
+import { TaperChart } from "../components/TaperChart";
 import { todayISO } from "../model/dates";
 import type { Taper, TaperUnit } from "../model/types";
 import {
@@ -45,6 +46,11 @@ export function TaperScreen({
           medical taper, talk to a clinician.
         </div>
       </div>
+      {taper.history.length >= 2 && (
+        <div style={{ marginBottom: 22 }}>
+          <TaperChart history={taper.history} unit={taper.unit} goal={taper.goal} />
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <Field label="Starting dose">
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
