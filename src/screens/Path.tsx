@@ -1,14 +1,20 @@
 import { JourneyChart } from "../components/JourneyChart";
-import type { JourneyMonth, Metrics } from "../model/types";
+import { SymptomTrendChart } from "../components/SymptomTrendChart";
+import { cleanMilestones } from "../model/phase";
+import type { JourneyMonth, Metrics, TrendPoint } from "../model/types";
 import { ACCENT, PANEL, WARM, eyebrow } from "../styles/tokens";
 
-export function Path({ m, journey }: { m: Metrics; journey: JourneyMonth[] }) {
-  const stats = [
-    { value: `${m.cumulativePct}%`, label: "Clean days" },
-    { value: m.currentStreak, label: "Current streak" },
-    { value: m.moneySaved != null ? `$${m.moneySaved.toLocaleString()}` : "—", label: "Money saved" },
-    { value: m.urgesRidden, label: "Urges ridden" },
-  ];
+// Longitudinal view only — summary numbers live on Today and Money.
+export function Path({
+  m,
+  journey,
+  trend,
+}: {
+  m: Metrics;
+  journey: JourneyMonth[];
+  trend: TrendPoint[];
+}) {
+  const miles = cleanMilestones(m.currentStreak);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
       <div>
@@ -26,13 +32,47 @@ export function Path({ m, journey }: { m: Metrics; journey: JourneyMonth[] }) {
           </span>
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        {stats.map((s, i) => (
-          <div key={i} style={{ background: PANEL, borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
-            <div style={{ fontSize: 24, fontWeight: 700 }}>{s.value}</div>
-            <div style={{ fontSize: 11, color: "rgba(234,242,244,0.45)", marginTop: 4 }}>{s.label}</div>
+      <div>
+        <div style={{ ...eyebrow, letterSpacing: 0.5 }}>Symptoms over time</div>
+        {trend.length < 2 ? (
+          <div style={{ fontSize: 14, color: "rgba(234,242,244,0.4)", padding: "14px 0", lineHeight: 1.5 }}>
+            Rate your symptoms in a few check-ins. Once there are two days of data, you'll see the line — and
+            watch it fall as withdrawal recedes.
           </div>
-        ))}
+        ) : (
+          <SymptomTrendChart points={trend} />
+        )}
+      </div>
+      <div>
+        <div style={{ ...eyebrow, letterSpacing: 0.5 }}>Milestones</div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {miles.map((x) => (
+            <div
+              key={x.d}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "7px 0",
+                opacity: x.hit ? 1 : 0.35,
+              }}
+            >
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  flexShrink: 0,
+                  background: x.hit ? ACCENT : "transparent",
+                  border: `2px solid ${x.hit ? ACCENT : "rgba(234,242,244,0.4)"}`,
+                  boxSizing: "border-box",
+                }}
+              />
+              <span style={{ flex: 1, fontSize: 14 }}>{x.label}</span>
+              <span style={{ fontSize: 11, color: "rgba(234,242,244,0.45)" }}>day {x.d}</span>
+            </div>
+          ))}
+        </div>
       </div>
       <div style={{ background: "rgba(95,176,165,0.08)", border: "1px solid rgba(95,176,165,0.2)", borderRadius: 14, padding: 16 }}>
         <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(234,242,244,0.75)" }}>

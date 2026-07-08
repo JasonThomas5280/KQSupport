@@ -1,16 +1,10 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
+import { Overlay } from "../components/Overlay";
+import { TaperChart } from "../components/TaperChart";
 import { todayISO } from "../model/dates";
 import type { Taper, TaperUnit } from "../model/types";
-import {
-  ACCENT,
-  TEXT,
-  closeBtnStyle,
-  eyebrow,
-  inputStyle,
-  overlayStyle,
-  primaryBtn,
-} from "../styles/tokens";
+import { ACCENT, TEXT, eyebrow, inputStyle, primaryBtn } from "../styles/tokens";
 
 // Log-only. Records numbers the USER decides; never recommends a dose, rate, or
 // schedule (build spec §2 — non-negotiable safety boundary).
@@ -33,10 +27,7 @@ export function TaperScreen({
   const [goal, setGoal] = useState<string>(taper.goal != null ? String(taper.goal) : "0");
   const units: TaperUnit[] = ["g", "ml", "bottles"];
   return (
-    <div style={{ ...overlayStyle, overflow: "auto" }}>
-      <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
-        ×
-      </button>
+    <Overlay onClose={onClose} style={{ overflow: "auto" }}>
       <div style={{ marginBottom: 22 }}>
         <div style={eyebrow}>Taper log</div>
         <div style={{ fontSize: 24, fontWeight: 300, lineHeight: 1.3 }}>Track your own taper.</div>
@@ -45,6 +36,11 @@ export function TaperScreen({
           medical taper, talk to a clinician.
         </div>
       </div>
+      {taper.history.length >= 2 && (
+        <div style={{ marginBottom: 22 }}>
+          <TaperChart history={taper.history} unit={taper.unit} goal={taper.goal} />
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <Field label="Starting dose">
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -93,6 +89,6 @@ export function TaperScreen({
       >
         Save taper log
       </button>
-    </div>
+    </Overlay>
   );
 }

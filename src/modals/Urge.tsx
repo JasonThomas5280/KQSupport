@@ -1,13 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  ACCENT,
-  PANEL,
-  TEXT,
-  closeBtnStyle,
-  ghostBtn,
-  overlayStyle,
-  primaryBtn,
-} from "../styles/tokens";
+import { Overlay } from "../components/Overlay";
+import { ACCENT, PANEL, TEXT, ghostBtn, primaryBtn } from "../styles/tokens";
 import type { AppState, CircleMember, UrgeOutcome } from "../model/types";
 
 // The core intervention. Supports & redirects only — never assesses, diagnoses,
@@ -71,11 +64,7 @@ export function UrgeScreen({
   const elapsed = 20 * 60 - secondsLeft;
 
   return (
-    <div style={{ ...overlayStyle, background: "#0a1118" }}>
-      <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
-        ×
-      </button>
-
+    <Overlay onClose={onClose} style={{ background: "#0a1118" }}>
       {phase === "hold" && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 26 }}>
           <div style={{ fontSize: 26, fontWeight: 300, lineHeight: 1.35 }}>
@@ -188,6 +177,6 @@ export function UrgeScreen({
           ))}
         </div>
       )}
-    </div>
+    </Overlay>
   );
 }

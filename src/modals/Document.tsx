@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
+import { Overlay } from "../components/Overlay";
 import { todayISO } from "../model/dates";
 import type { SetbackEntry } from "../model/types";
-import { closeBtnStyle, eyebrow, inputStyle, overlayStyle, primaryBtn } from "../styles/tokens";
+import { eyebrow, inputStyle, primaryBtn } from "../styles/tokens";
 
 // "A slip is data, not a verdict." Never described as a reset (build spec §D).
 export function DocumentScreen({
@@ -17,10 +18,7 @@ export function DocumentScreen({
   const [learned, setLearned] = useState("");
   const [next, setNext] = useState("");
   return (
-    <div style={{ ...overlayStyle, overflow: "auto" }}>
-      <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
-        ×
-      </button>
+    <Overlay onClose={onClose} style={{ overflow: "auto" }}>
       <div style={{ marginBottom: 26 }}>
         <div style={eyebrow}>Document a slip</div>
         <div style={{ fontSize: 24, fontWeight: 300, lineHeight: 1.3, marginBottom: 8 }}>
@@ -75,6 +73,6 @@ export function DocumentScreen({
       >
         Keep going
       </button>
-    </div>
+    </Overlay>
   );
 }

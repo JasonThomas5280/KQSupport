@@ -1,0 +1,110 @@
+/* Only what inline styles cannot express: keyframes, reduced-motion, and
+   desktop (>= 720px) framing. All component styling stays inline. */
+
+@keyframes clear-overlay-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes clear-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes clear-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.clear-overlay {
+  animation: clear-overlay-in 0.22s ease-out;
+}
+
+.clear-fade {
+  animation: clear-fade-in 0.18s ease-out;
+}
+
+.clear-splash-mark {
+  animation: clear-pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clear-overlay,
+  .clear-fade,
+  .clear-splash-mark {
+    animation: none;
+  }
+}
+
+.clear-desktop-brand {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  body {
+    background: #0a1017;
+  }
+
+  /* Frame the 430px column as a phone. !important is needed to beat the
+     app's inline styles; this file is the only place that does so. */
+  .clear-phone {
+    display: flex !important;
+    flex-direction: column;
+    height: min(880px, calc(100vh - 80px)) !important;
+    min-height: 0 !important;
+    margin: 40px auto 0 !important;
+    border-radius: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .clear-content {
+    flex: 1 0 auto;
+    min-height: 0 !important;
+  }
+
+  .clear-tabbar {
+    position: sticky !important;
+    left: auto !important;
+    transform: none !important;
+    border-radius: 0 0 36px 36px;
+  }
+
+  /* Full-screen overlays (modals, onboarding) adopt the same geometry so
+     they sit exactly on the frame instead of covering the viewport. */
+  .clear-overlay {
+    top: 40px !important;
+    bottom: auto !important;
+    height: min(880px, calc(100vh - 80px));
+    box-sizing: border-box;
+    border-radius: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    overflow-y: auto;
+  }
+
+  .clear-desktop-brand {
+    display: block;
+    position: fixed;
+    top: 28px;
+    left: 32px;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}

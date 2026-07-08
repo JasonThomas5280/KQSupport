@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Field } from "../components/Field";
 import { OnboardingArt } from "../components/OnboardingArt";
+import { StepIndicator } from "../components/StepIndicator";
 import { PRODUCTS } from "../model/constants";
 import { todayISO } from "../model/dates";
 import type { Method, Product, Profile } from "../model/types";
@@ -184,21 +185,8 @@ export function Onboarding({ onComplete }: { onComplete: (profile: Profile) => v
   ];
 
   return (
-    <div style={{ ...overlayStyle, justifyContent: "flex-start" }}>
-      <div style={{ display: "flex", gap: 6, marginBottom: 28 }}>
-        {[0, 1, 2, 3].map((i) => (
-          <div
-            key={i}
-            style={{
-              flex: 1,
-              height: 3,
-              borderRadius: 2,
-              background: i <= step ? ACCENT : "rgba(255,255,255,0.1)",
-              transition: "background .3s",
-            }}
-          />
-        ))}
-      </div>
+    <div className="clear-overlay" style={{ ...overlayStyle, justifyContent: "flex-start", overflow: "auto" }}>
+      <StepIndicator step={step} total={4} />
       {steps[step]}
     </div>
   );

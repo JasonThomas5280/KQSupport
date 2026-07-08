@@ -4,9 +4,18 @@ import { deriveMetrics, deriveJourney, deriveSymptomTrend } from "./model/derive
 import type { CircleMember } from "./model/types";
 import { Onboarding } from "./screens/Onboarding";
 import { Today } from "./screens/Today";
-import { Saved } from "./screens/Saved";
+import { Money } from "./screens/Money";
 import { Path } from "./screens/Path";
 import { Circle } from "./screens/Circle";
+import {
+  IconCircle,
+  IconHelp,
+  IconMoney,
+  IconPath,
+  IconSettings,
+  IconToday,
+  type IconProps,
+} from "./components/icons";
 import { UrgeScreen } from "./modals/Urge";
 import { CheckInScreen } from "./modals/CheckIn";
 import { DocumentScreen } from "./modals/Document";
@@ -41,15 +50,23 @@ export default function App() {
   const journey = deriveJourney(state);
   const trend = deriveSymptomTrend(state);
 
-  const tabs: { key: Screen; label: string; icon: string }[] = [
-    { key: "home", label: "Today", icon: "◉" },
-    { key: "progress", label: "Saved", icon: "↗" },
-    { key: "journey", label: "Path", icon: "◫" },
-    { key: "connect", label: "Circle", icon: "◎" },
+  const tabs: { key: Screen; label: string; Icon: (p: IconProps) => JSX.Element }[] = [
+    { key: "home", label: "Today", Icon: IconToday },
+    { key: "progress", label: "Money", Icon: IconMoney },
+    { key: "journey", label: "Path", Icon: IconPath },
+    { key: "connect", label: "Circle", Icon: IconCircle },
   ];
 
   return (
+    <>
+      <div className="clear-desktop-brand">
+        <div style={{ fontSize: 20, fontWeight: 300, letterSpacing: 5, color: "rgba(234,242,244,0.8)" }}>CLEAR</div>
+        <div style={{ fontSize: 12, color: "rgba(234,242,244,0.4)", marginTop: 4 }}>
+          Track the whole path, not just the streak.
+        </div>
+      </div>
     <div
+      className="clear-phone"
       style={{
         background: BG,
         color: TEXT,
@@ -97,13 +114,27 @@ export default function App() {
         />
       )}
 
-      <div style={{ padding: "48px 24px 120px", minHeight: "100vh", boxSizing: "border-box" }}>
+      <div className="clear-content" style={{ padding: "48px 24px 120px", minHeight: "100vh", boxSizing: "border-box" }}>
         <button
           onClick={() => setModal("settings")}
-          style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", color: "rgba(234,242,244,0.4)", fontSize: 20, cursor: "pointer" }}
+          style={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            width: 44,
+            height: 44,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "none",
+            border: "none",
+            borderRadius: 12,
+            color: "rgba(234,242,244,0.65)",
+            cursor: "pointer",
+          }}
           aria-label="Settings"
         >
-          ⚙
+          <IconSettings size={20} />
         </button>
 
         {screen === "home" && (
@@ -115,12 +146,13 @@ export default function App() {
             onDocument={() => setModal("document")}
           />
         )}
-        {screen === "progress" && <Saved state={state} m={m} trend={trend} onOpenSettings={() => setModal("settings")} />}
-        {screen === "journey" && <Path m={m} journey={journey} />}
+        {screen === "progress" && <Money state={state} m={m} onOpenSettings={() => setModal("settings")} />}
+        {screen === "journey" && <Path m={m} journey={journey} trend={trend} />}
         {screen === "connect" && <Circle state={state} onInvite={() => setModal("invite")} />}
       </div>
 
       <div
+        className="clear-tabbar"
         style={{
           position: "fixed",
           bottom: 0,
@@ -142,7 +174,9 @@ export default function App() {
           aria-label="I need help right now"
           style={{ background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "4px 10px" }}
         >
-          <span style={{ fontSize: 22, lineHeight: 1, filter: "drop-shadow(0 0 6px rgba(212,104,94,0.55))" }}>🆘</span>
+          <span style={{ display: "flex", color: "#e87a70", filter: "drop-shadow(0 0 6px rgba(212,104,94,0.55))" }}>
+            <IconHelp />
+          </span>
           <span style={{ fontSize: 10, letterSpacing: 0.5, color: "#e87a70", fontWeight: 600 }}>Help</span>
         </button>
         {tabs.map((t) => (
@@ -161,11 +195,14 @@ export default function App() {
               padding: "4px 10px",
             }}
           >
-            <span style={{ fontSize: 20 }}>{t.icon}</span>
+            <span style={{ display: "flex" }}>
+              <t.Icon />
+            </span>
             <span style={{ fontSize: 10, letterSpacing: 0.5 }}>{t.label}</span>
           </button>
         ))}
       </div>
     </div>
+    </>
   );
 }
