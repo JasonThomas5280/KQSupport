@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d89c5a"/>
+      <stop offset="45%" stop-color="#5b8fc7"/>
+      <stop offset="100%" stop-color="#5fb0a5"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="#0f1822"/>
+  <!-- 72% progress ring, matching the in-app GradientRing -->
+  <circle cx="256" cy="256" r="150" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="34"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="url(#rg)" stroke-width="34"
+          stroke-linecap="round" stroke-dasharray="942.48" stroke-dashoffset="263.9"
+          transform="rotate(-90 256 256)"/>
+</svg>
