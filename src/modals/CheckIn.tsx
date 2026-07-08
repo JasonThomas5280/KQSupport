@@ -1,12 +1,11 @@
 import { useState } from "react";
+import { SeverityTrack } from "../components/SeverityTrack";
+import { StepIndicator } from "../components/StepIndicator";
 import { SYMPTOMS, MOOD_MAP } from "../model/constants";
 import { todayISO } from "../model/dates";
 import type { CheckinEntry } from "../model/types";
 import {
-  ACCENT,
-  PANEL,
   TEXT,
-  WARM,
   closeBtnStyle,
   eyebrow,
   ghostBtn,
@@ -27,13 +26,12 @@ export function CheckInScreen({
   const [sev, setSev] = useState<Record<string, number | undefined>>({});
   const [note, setNote] = useState("");
   const moods = Object.entries(MOOD_MAP).map(([k, v]) => ({ key: k, ...v }));
-  const setSeverity = (k: string, v: number) =>
-    setSev((p) => ({ ...p, [k]: p[k] === v ? undefined : v }));
   return (
     <div style={{ ...overlayStyle, overflow: "auto" }}>
       <button onClick={onClose} style={closeBtnStyle} aria-label="Close">
         ×
       </button>
+      <StepIndicator step={step - 1} total={2} label={step === 1 ? "How you feel" : "Symptoms & note"} />
       {step === 1 && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 28 }}>
           <div>
@@ -95,35 +93,12 @@ export function CheckInScreen({
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {SYMPTOMS.map((s) => (
-              <div key={s.key} style={{ background: PANEL, borderRadius: 12, padding: "10px 12px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 14 }}>{s.label}</span>
-                  <div style={{ display: "flex", gap: 5 }}>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <button
-                        key={n}
-                        onClick={() => setSeverity(s.key, n)}
-                        aria-label={`${s.label} severity ${n}`}
-                        style={{
-                          width: 26,
-                          height: 26,
-                          borderRadius: 7,
-                          cursor: "pointer",
-                          fontSize: 12,
-                          color: (sev[s.key] ?? 0) >= n ? "#06120f" : "rgba(234,242,244,0.5)",
-                          background:
-                            (sev[s.key] ?? 0) >= n
-                              ? `linear-gradient(135deg, ${WARM}, ${ACCENT})`
-                              : "rgba(255,255,255,0.05)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                        }}
-                      >
-                        {n}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <SeverityTrack
+                key={s.key}
+                label={s.label}
+                value={sev[s.key]}
+                onChange={(v) => setSev((p) => ({ ...p, [s.key]: v }))}
+              />
             ))}
           </div>
           <textarea
